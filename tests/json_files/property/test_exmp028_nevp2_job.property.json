@@ -13,15 +13,15 @@
     "Calculation_Status": {
         "Status": "NORMAL TERMINATION",
         "progName": "ProgCAS",
-        "version": "6.1.0-f.0"
+        "version": "6.1.1-f.0"
     },
     "Calculation_Timings": {
-        "CASSCF": 2.7189019999999995,
-        "GTOINT": 0.31697400000000003,
-        "PROP": 0.2803089999999999,
-        "PROPINT": 0.2775970000000001,
-        "SCF": 0.30007100000000003,
-        "SUM": 3.8938529999999996
+        "CASSCF": 4.831000999999999,
+        "GTOINT": 1.855968,
+        "PROP": 0.2740659999999995,
+        "PROPINT": 0.28430299999999953,
+        "SCF": 0.29650299999999996,
+        "SUM": 7.541840999999998
     },
     "Geometries": [
         {

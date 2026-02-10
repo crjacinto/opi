@@ -1,6 +1,6 @@
 {
   "ORCA Header": {
-    "Version": "6.1.0-f.0"
+    "Version": "6.1.1-f.0"
   },
   "Citations": [
     {
@@ -7523,6 +7523,7 @@
       0.0,
       0.0,
       0.0
-    ]
+    ],
+    "STEOM": null
   }
 }

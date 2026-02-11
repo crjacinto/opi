@@ -64,8 +64,11 @@
 - Fix to `fragproc` attribute in `BlockFrag`. #43
 - Fixed header of documentation showing always OPI version 1.x. #194
 - Fixed values of block options being automatically converted to lowercase. #191
+- Fixed example 40 not taking `working_dir`.
+- Fixed test of example 47 not receiving a `working_dir`.
 
 ## Changed
+- Raised minimal required ORCA version to 6.1.1. The test examples where updated accordingly.
 - Configuration of a path to Open MPI is now optional. #17
 - `Element` enum is now case-insensitive. #52
 - `Input.get_structure()` now adds fragment IDs to the structure with argument `with_fragments`. #34

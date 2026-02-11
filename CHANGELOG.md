@@ -43,6 +43,7 @@
 - Addition of strict argument to `BaseStructureFile`. #189
 - `IntGroupEnd` class created to model certain attributes in blocks. #190
 - Additional functionality for `BlockBasis` added. #43
+- Added `PopulationAnalysisWithAtomicCharges` for population analysis with atomic charge info.
 
 ### Fixed 
 - Fixed the links on the tutorial start page. #2

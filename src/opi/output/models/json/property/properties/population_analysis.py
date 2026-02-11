@@ -39,7 +39,19 @@ class PopulationAnalysis(GetItem):
     irrep: StrictInt | None = None
 
 
-class MullikenPopulationAnalysis(PopulationAnalysis):
+class PopulationAnalysisWithAtomicCharges(PopulationAnalysis):
+    """
+    Class that extends `PopulationAnalysis` with atomic charges.
+
+    Attributes
+    ----------
+    atomiccharges: list[list[StrictFiniteFloat]] | None, default = None
+        Charges of the atoms according to the population analysis
+    """
+    atomiccharges: list[list[StrictFiniteFloat]] | None = None
+
+
+class MullikenPopulationAnalysis(PopulationAnalysisWithAtomicCharges):
     """This class contains the information about the Mulliken population analysis
     Attributes
     ----------
@@ -47,10 +59,10 @@ class MullikenPopulationAnalysis(PopulationAnalysis):
         Charges of the atoms according to the population analysis
     """
 
-    atomiccharges: list[list[StrictFiniteFloat]] | None = None
+    pass
 
 
-class LoewdinPopulationAnalysis(PopulationAnalysis):
+class LoewdinPopulationAnalysis(PopulationAnalysisWithAtomicCharges):
     """This class contains the information about the Loewdin population analysis
 
     Attributes
@@ -58,11 +70,10 @@ class LoewdinPopulationAnalysis(PopulationAnalysis):
     atomiccharges: list[list[StrictFiniteFloat]] | None, default = None
         Charges of the atoms according to the population analysis
     """
+    pass
 
-    atomiccharges: list[list[StrictFiniteFloat]] | None = None
 
-
-class ChelpgPopulationAnalysis(PopulationAnalysis):
+class ChelpgPopulationAnalysis(PopulationAnalysisWithAtomicCharges):
     """This class contains the information about the CHELPG population analysis
 
     Attributes
@@ -71,4 +82,4 @@ class ChelpgPopulationAnalysis(PopulationAnalysis):
         Charges of the atoms according to the population analysis
     """
 
-    atomiccharges: list[list[StrictFiniteFloat]] | None = None
+    pass

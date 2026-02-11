@@ -48,6 +48,7 @@ class PopulationAnalysisWithAtomicCharges(PopulationAnalysis):
     atomiccharges: list[list[StrictFiniteFloat]] | None, default = None
         Charges of the atoms according to the population analysis
     """
+
     atomiccharges: list[list[StrictFiniteFloat]] | None = None
 
 
@@ -70,6 +71,7 @@ class LoewdinPopulationAnalysis(PopulationAnalysisWithAtomicCharges):
     atomiccharges: list[list[StrictFiniteFloat]] | None, default = None
         Charges of the atoms according to the population analysis
     """
+
     pass
 
 

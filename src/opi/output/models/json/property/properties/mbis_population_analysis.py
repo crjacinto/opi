@@ -6,7 +6,9 @@ from opi.output.models.base.strict_types import (
     StrictPositiveFloat,
     StrictPositiveInt,
 )
-from opi.output.models.json.property.properties.population_analysis import PopulationAnalysisWithAtomicCharges
+from opi.output.models.json.property.properties.population_analysis import (
+    PopulationAnalysisWithAtomicCharges,
+)
 
 
 class MbisPopulationAnalysis(PopulationAnalysisWithAtomicCharges):

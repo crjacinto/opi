@@ -1993,7 +1993,8 @@ class Output:
         Parameters
         ----------
         gbw_index: int, default = 0
-            Non-negative index of gbw file in `self.gbw_json_files` for which the json file should be created. Default 0 refers to the main gbw file.
+            Index (>= 0) of the gbw file in `self.gbw_json_files` for which the json file should be created.
+            Negative indices are not allowed. Default 0 refers to the main gbw file.
 
         """
         self.create_gbw_json(force=True, config=config_dict, gbw_index=gbw_index)
@@ -2017,7 +2018,8 @@ class Output:
             If True, recreate the gbw json file and request the overlap integrals to be included.
             The request for these integrals will be added to the `config_dict` attribute.
         gbw_index: int, default = 0
-            Non-negative index of gbw file in `self.gbw_json_files` for which integrals are requested. Default 0 refers to the main gbw file.
+                Index (>= 0) of the gbw file in `self.gbw_json_files` for which integrals are requested.
+                Negative indices are not allowed. Default 0 refers to the main gbw file.
         """
 
         if recreate_json:
@@ -2052,7 +2054,8 @@ class Output:
             If True, recreate the gbw json file and request the hcore integrals to be included.
             The request for these integrals will be added to the `config_dict` attribute.
         gbw_index: int, default = 0
-            Non-negative index of gbw file in `self.gbw_json_files` for which integrals are requested. Default 0 refers to the main gbw file.
+                Index (>= 0) of the gbw file in `self.gbw_json_files` for which integrals are requested.
+                Negative indices are not allowed. Default 0 refers to the main gbw file.
         """
 
         if recreate_json:
@@ -2086,7 +2089,8 @@ class Output:
             If True, recreate the gbw json file and request the fock correction integrals to be included.
             The request for these integrals will be added to the `config_dict` attribute.
         gbw_index: int, default = 0
-            Non-negative index of gbw file in `self.gbw_json_files` for which integrals are requested. Default 0 refers to the main gbw file.
+                Index (>= 0) of the gbw file in `self.gbw_json_files` for which integrals are requested.
+                Negative indices are not allowed. Default 0 refers to the main gbw file.
         """
 
         if recreate_json:
@@ -2119,7 +2123,8 @@ class Output:
             If True, recreate the gbw json file and request J to be included.
             The request for these integrals will be added to the `config_dict` attribute.
         gbw_index: int, default = 0
-            Non-negative index of gbw file in `self.gbw_json_files` for which integrals are requested. Default 0 refers to the main gbw file.
+                Index (>= 0) of the gbw file in `self.gbw_json_files` for which integrals are requested.
+                Negative indices are not allowed. Default 0 refers to the main gbw file.
         """
 
         if recreate_json:
@@ -2152,7 +2157,8 @@ class Output:
             If True, recreate the gbw json file and request K to be included.
             The request for these integrals will be added to the `config_dict` attribute.
         gbw_index: int, default = 0
-            Non-negative index of gbw file in `self.gbw_json_files` for which integrals are requested. Default 0 refers to the main gbw file.
+                Index (>= 0) of the gbw file in `self.gbw_json_files` for which integrals are requested.
+                Negative indices are not allowed. Default 0 refers to the main gbw file.
         """
 
         if recreate_json:
@@ -2170,6 +2176,72 @@ class Output:
 
         if k_list is not None:
             return np.array(k_list[0])
+        else:
+            return None
+
+    def get_scf_density(
+        self, recreate_json: bool = False, gbw_index: int = 0
+    ) -> npt.NDArray[np.float64] | None:
+        """
+        Returns the SCF density matrix.
+
+        Parameters
+        ----------
+        recreate_json : bool, default = False
+            If True, recreate the gbw json file and request scfp to be included.
+            The request for the density will be added to the `config_dict` attribute.
+        gbw_index: int, default = 0
+                Index (>= 0) of the gbw file in `self.gbw_json_files` for which densities are requested.
+                Negative indices are not allowed. Default 0 refers to the main gbw file.
+        """
+        if recreate_json:
+            if self.config_dict is None:
+                self.config_dict = {}
+            # // Densities
+            if "Densities" not in self.config_dict:
+                self.config_dict["Densities"] = []
+            # // scfp - SCF density matrix P
+            if "scfp" not in self.config_dict["Densities"]:
+                self.config_dict["Densities"].append("scfp")
+            self.recreate_gbw_results(self.config_dict, gbw_index)
+
+        scfp_list = self._safe_get("results_gbw", gbw_index, "molecule", "densities", "scfp")
+
+        if scfp_list is not None:
+            return np.array(scfp_list, dtype=np.float64)
+        else:
+            return None
+
+    def get_scf_spin_density(
+        self, recreate_json: bool = False, gbw_index: int = 0
+    ) -> npt.NDArray[np.float64] | None:
+        """
+        Returns the SCF spin-density matrix.
+
+        Parameters
+        ----------
+        recreate_json : bool, default = False
+            If True, recreate the gbw json file and request scfr to be included.
+            The request for the density will be added to the `config_dict` attribute.
+        gbw_index: int, default = 0
+                Index (>= 0) of the gbw file in `self.gbw_json_files` for which densities are requested.
+                Negative indices are not allowed. Default 0 refers to the main gbw file.
+        """
+        if recreate_json:
+            if self.config_dict is None:
+                self.config_dict = {}
+            # // Densities
+            if "Densities" not in self.config_dict:
+                self.config_dict["Densities"] = []
+            # // scfr - SCF spin-density matrix
+            if "scfr" not in self.config_dict["Densities"]:
+                self.config_dict["Densities"].append("scfr")
+            self.recreate_gbw_results(self.config_dict, gbw_index)
+
+        scfr_list = self._safe_get("results_gbw", gbw_index, "molecule", "densities", "scfr")
+
+        if scfr_list is not None:
+            return np.array(scfr_list, dtype=np.float64)
         else:
             return None
 

@@ -861,6 +861,99 @@ class Structure:
         xyz_block = structure.to_xyz_block()
         return MolFromXYZBlock(xyz_block)
 
+    def to_molbar(
+        self,
+        *,
+        return_data: bool = False,
+        mode: str = "mb",
+        total_charge: int | None = None,
+    ) -> "str | tuple[str, dict[str, Any]]":
+        """
+        Compute the MolBar identifier for this :class:`Structure`.
+
+        (https://git.rwth-aachen.de/bannwarthlab/molbar).
+
+        Element symbols and Cartesian coordinates are extracted directly from
+        :attr:`atoms`.
+        Only real :class:`~opi.input.structures.atom.Atom` entries are passed
+        to MolBar; :class:`~opi.input.structures.atom.EmbeddingPotential`,
+        :class:`~opi.input.structures.atom.GhostAtom`, and
+        :class:`~opi.input.structures.atom.PointCharge` instances are silently
+        skipped.
+
+        MolBar is **not** a dependency of OPI and must be installed separately::
+
+            pip install molbar
+
+        Parameters
+        ----------
+        return_data : bool, default False
+            If ``True``, return the full MolBar data dictionary in addition to
+            the barcode string.
+        mode : str, default ``"mb"``
+            MolBar calculation mode. ``"mb"`` computes the full barcode;
+            ``"topo"`` computes only the topology part.
+        total_charge : int | None, default None
+            Total charge passed to MolBar. When ``None``, defaults to
+            ``self.charge``.
+
+        Returns
+        -------
+        str
+            The MolBar barcode string (when *return_data* is ``False``).
+        tuple[str, dict[str, Any]]
+            The MolBar barcode string and the full data dictionary
+            (when *return_data* is ``True``).
+
+        Raises
+        ------
+        ImportError
+            If MolBar is not installed.
+        ValueError
+            If this structure contains no real :class:`~opi.input.structures.atom.Atom`
+            instances.
+        """
+        try:
+            from molbar.barcode import get_molbar_from_coordinates  # type: ignore
+        except ImportError as err:
+            raise ImportError(
+                "MolBar is not installed. Install it with: pip install molbar"
+            ) from err
+
+        # > Collect elements and coordinates:
+        # > iterate self.atoms and call atom.format_xyz_line() on each entry.
+        # > Each line has the format "SYMBOL  x  y  z" (standard XYZ).
+        elements: list[str] = []
+        coords: list[list[float]] = []
+
+        for atom in self.atoms:
+            parts = atom.format_xyz_line().split()
+            elements.append(parts[0])
+            coords.append([float(parts[1]), float(parts[2]), float(parts[3])])
+
+        if not elements:
+            raise ValueError(
+                f"{self.__class__.__name__}.to_molbar: structure contains no atoms; "
+                "cannot build MolBar input."
+            )
+
+        # > Build (N, 3) coordinate array for type safety; convert back to list for MolBar
+        coordinates: list[list[float]] = np.array(coords, dtype=np.float64).tolist()
+
+        if total_charge is None:
+            total_charge = self.charge
+
+        return cast(
+            "str | tuple[str, dict[str, Any]]",
+            get_molbar_from_coordinates(
+                coordinates,
+                elements,
+                total_charge=total_charge,
+                return_data=return_data,
+                mode=mode,
+            ),
+        )
+
     def __len__(self) -> int:
         return len(self.atoms)
 
